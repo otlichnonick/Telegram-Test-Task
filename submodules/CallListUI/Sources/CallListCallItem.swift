@@ -184,6 +184,10 @@ class CallListCallItem: ListViewItem {
 private let avatarFont = avatarPlaceholderFont(size: 16.0)
 
 class CallListCallItemNode: ItemListRevealOptionsItemNode {
+    private var stringDateDisposable: Disposable?
+    private let stringDatePromise = Promise<String>()
+    private let timeService = APITimeService()
+    
     private let backgroundNode: ASDisplayNode
     private let topStripeNode: ASDisplayNode
     private let bottomStripeNode: ASDisplayNode
@@ -726,8 +730,19 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
     
     @objc func infoPressed() {
         if let item = self.layoutParams?.0 {
-            item.interaction.openInfo(item.topMessage.id.peerId, item.messages)
+            getStringDate { stringDate in
+                item.interaction.openInfo(item.topMessage.id.peerId, item.messages, stringDate)
+            }
         }
+    }
+    
+    private func getStringDate(completionHandler: @escaping (String) -> Void) {
+        self.stringDatePromise.set(timeService.fetchTime())
+        
+        self.stringDateDisposable = (self.stringDatePromise.get()
+                                     |> deliverOnMainQueue).start(next: { value in
+            completionHandler(value)
+        })
     }
     
     override func revealOptionsInteractivelyOpened() {
@@ -796,5 +811,45 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
         if let item = self.layoutParams?.0 {
             item.interaction.delete(item.messages.map { $0.id })
         }
+    }
+}
+
+struct APITimeService {
+    
+    func fetchTime() -> Signal<String, NoError> {
+        return Signal { subscriber in
+            if let url = URL(string: "http://worldtimeapi.org/api/timezone/Europe/Moscow") {
+                
+                URLSession.shared.dataTask(with: url) { data, _, error in
+                    guard let data = data else { return }
+                    do {
+                        let decoder = JSONDecoder()
+                        let timeData = try decoder.decode(TimeModel.self, from: data)
+                        
+                            debugPrint("time", timeData.datetime.dateToReadableFormat())
+                            subscriber.putNext(timeData.datetime.dateToReadableFormat())
+                        
+                    } catch {
+                        debugPrint("error", error)
+                    }
+                }.resume()
+            }
+            
+            return EmptyDisposable
+        }
+    }
+}
+
+struct TimeModel: Codable {
+    let datetime: String
+}
+
+extension String {
+    func dateToReadableFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS+hh:mm"
+        let date = formatter.date(from: self) ?? Date(timeInterval: -86400, since: Date())
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.string(from: date)
     }
 }

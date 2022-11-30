@@ -14,14 +14,16 @@ public class ItemListCallListItem: ListViewItem, ItemListItem {
     let presentationData: ItemListPresentationData
     let dateTimeFormat: PresentationDateTimeFormat
     let messages: [Message]
+    let stringDate: String
     public let sectionId: ItemListSectionId
     let style: ItemListStyle
     let displayDecorations: Bool
     
-    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, messages: [Message], sectionId: ItemListSectionId, style: ItemListStyle, displayDecorations: Bool = true) {
+    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, messages: [Message], stringData: String, sectionId: ItemListSectionId, style: ItemListStyle, displayDecorations: Bool = true) {
         self.presentationData = presentationData
         self.dateTimeFormat = dateTimeFormat
         self.messages = messages
+        self.stringDate = stringData
         self.sectionId = sectionId
         self.style = style
         self.displayDecorations = displayDecorations
@@ -232,8 +234,9 @@ public class ItemListCallListItemNode: ListViewItemNode {
                 insets = UIEdgeInsets()
             }
             
-            let earliestMessage = item.messages.sorted(by: {$0.timestamp < $1.timestamp}).first!
-            let titleText = stringForDate(timestamp: earliestMessage.timestamp, strings: item.presentationData.strings)
+//            let earliestMessage = item.messages.sorted(by: {$0.timestamp < $1.timestamp}).first!
+//            let titleText = stringForDate(timestamp: earliestMessage.timestamp, strings: item.presentationData.strings)
+            let titleText = item.stringDate
             let (titleLayout, titleApply) = makeTitleLayout(TextNodeLayoutArguments(attributedString: NSAttributedString(string: titleText, font: titleFont, textColor: item.presentationData.theme.list.itemPrimaryTextColor), backgroundColor: nil, maximumNumberOfLines: 1, truncationType: .end, constrainedSize: CGSize(width: params.width - params.rightInset - 20.0 - leftInset, height: CGFloat.greatestFiniteMagnitude), alignment: .natural, cutout: nil, insets: UIEdgeInsets()))
             
             contentHeight += titleLayout.size.height + 18.0
