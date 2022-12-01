@@ -363,14 +363,14 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
             let itemSeparatorColor: UIColor
             
             switch item.style {
-                case .plain:
-                    itemBackgroundColor = item.presentationData.theme.list.plainBackgroundColor
-                    itemSeparatorColor = item.presentationData.theme.list.itemPlainSeparatorColor
-                    insets = itemListNeighborsPlainInsets(neighbors)
-                case .blocks:
-                    itemBackgroundColor = item.presentationData.theme.list.itemBlocksBackgroundColor
-                    itemSeparatorColor = item.presentationData.theme.list.itemBlocksSeparatorColor
-                    insets = itemListNeighborsGroupedInsets(neighbors, params)
+            case .plain:
+                itemBackgroundColor = item.presentationData.theme.list.plainBackgroundColor
+                itemSeparatorColor = item.presentationData.theme.list.itemPlainSeparatorColor
+                insets = itemListNeighborsPlainInsets(neighbors)
+            case .blocks:
+                itemBackgroundColor = item.presentationData.theme.list.itemBlocksBackgroundColor
+                itemSeparatorColor = item.presentationData.theme.list.itemBlocksSeparatorColor
+                insets = itemListNeighborsGroupedInsets(neighbors, params)
             }
             
             var dateRightInset: CGFloat = 46.0 + params.rightInset
@@ -395,30 +395,30 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
             var callDuration: Int32?
             
             for message in item.messages {
-                inner: for media in message.media {
-                    if let action = media as? TelegramMediaAction {
-                        if case let .phoneCall(_, discardReason, duration, video) = action.action {
-                            isVideo = video
-                            if message.flags.contains(.Incoming) {
-                                hasIncoming = true
-                                
-                                if let discardReason = discardReason, case .missed = discardReason {
-                                    titleColor = item.presentationData.theme.list.itemDestructiveColor
-                                    hasMissed = true
-                                }
-                            } else {
-                                hasOutgoing = true
+            inner: for media in message.media {
+                if let action = media as? TelegramMediaAction {
+                    if case let .phoneCall(_, discardReason, duration, video) = action.action {
+                        isVideo = video
+                        if message.flags.contains(.Incoming) {
+                            hasIncoming = true
+                            
+                            if let discardReason = discardReason, case .missed = discardReason {
+                                titleColor = item.presentationData.theme.list.itemDestructiveColor
+                                hasMissed = true
                             }
-                            if callDuration == nil && !hadDuration {
-                                hadDuration = true
-                                callDuration = duration
-                            } else {
-                                callDuration = nil
-                            }
+                        } else {
+                            hasOutgoing = true
                         }
-                        break inner
+                        if callDuration == nil && !hadDuration {
+                            hadDuration = true
+                            callDuration = duration
+                        } else {
+                            callDuration = nil
+                        }
                     }
+                    break inner
                 }
+            }
             }
             
             if let peer = item.topMessage.peers[item.topMessage.id.peerId] {
@@ -576,65 +576,65 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
                             }
                             
                             switch item.style {
-                                case .plain:
-                                    if strongSelf.backgroundNode.supernode == nil {
-                                        strongSelf.insertSubnode(strongSelf.backgroundNode, at: 0)
-                                    }
-                                    if strongSelf.topStripeNode.supernode != nil {
-                                        strongSelf.topStripeNode.removeFromSupernode()
-                                    }
-                                    if !last && strongSelf.bottomStripeNode.supernode == nil {
-                                        strongSelf.insertSubnode(strongSelf.bottomStripeNode, at: 1)
-                                    } else if last && strongSelf.bottomStripeNode.supernode != nil {
-                                        strongSelf.bottomStripeNode.removeFromSupernode()
-                                    }
-                                    if strongSelf.maskNode.supernode != nil {
-                                        strongSelf.maskNode.removeFromSupernode()
-                                    }
-                                    transition.updateFrameAdditive(node: strongSelf.bottomStripeNode, frame: CGRect(origin: CGPoint(x: leftInset, y: contentSize.height - separatorHeight), size: CGSize(width: params.width - leftInset, height: separatorHeight)))
-                                case .blocks:
-                                    if strongSelf.backgroundNode.supernode == nil {
-                                        strongSelf.insertSubnode(strongSelf.backgroundNode, at: 0)
-                                    }
-                                    if strongSelf.topStripeNode.supernode == nil {
-                                        strongSelf.insertSubnode(strongSelf.topStripeNode, at: 1)
-                                    }
-                                    if strongSelf.bottomStripeNode.supernode == nil {
-                                        strongSelf.insertSubnode(strongSelf.bottomStripeNode, at: 2)
-                                    }
-                                    if strongSelf.maskNode.supernode == nil {
-                                        strongSelf.addSubnode(strongSelf.maskNode)
-                                    }
-                                    let hasCorners = itemListHasRoundedBlockLayout(params)
-                                    var hasTopCorners = false
-                                    var hasBottomCorners = false
-                                    switch neighbors.top {
-                                        case .sameSection(false):
-                                            strongSelf.topStripeNode.isHidden = true
-                                        default:
-                                            hasTopCorners = true
-                                            strongSelf.topStripeNode.isHidden = hasCorners
-                                    }
-                                    let bottomStripeInset: CGFloat
-                                    switch neighbors.bottom {
-                                        case .sameSection(false):
-                                            bottomStripeInset = leftInset
-                                            strongSelf.bottomStripeNode.isHidden = false
-                                        default:
-                                            bottomStripeInset = 0.0
-                                            hasBottomCorners = true
-                                            strongSelf.bottomStripeNode.isHidden = hasCorners
-                                    }
+                            case .plain:
+                                if strongSelf.backgroundNode.supernode == nil {
+                                    strongSelf.insertSubnode(strongSelf.backgroundNode, at: 0)
+                                }
+                                if strongSelf.topStripeNode.supernode != nil {
+                                    strongSelf.topStripeNode.removeFromSupernode()
+                                }
+                                if !last && strongSelf.bottomStripeNode.supernode == nil {
+                                    strongSelf.insertSubnode(strongSelf.bottomStripeNode, at: 1)
+                                } else if last && strongSelf.bottomStripeNode.supernode != nil {
+                                    strongSelf.bottomStripeNode.removeFromSupernode()
+                                }
+                                if strongSelf.maskNode.supernode != nil {
+                                    strongSelf.maskNode.removeFromSupernode()
+                                }
+                                transition.updateFrameAdditive(node: strongSelf.bottomStripeNode, frame: CGRect(origin: CGPoint(x: leftInset, y: contentSize.height - separatorHeight), size: CGSize(width: params.width - leftInset, height: separatorHeight)))
+                            case .blocks:
+                                if strongSelf.backgroundNode.supernode == nil {
+                                    strongSelf.insertSubnode(strongSelf.backgroundNode, at: 0)
+                                }
+                                if strongSelf.topStripeNode.supernode == nil {
+                                    strongSelf.insertSubnode(strongSelf.topStripeNode, at: 1)
+                                }
+                                if strongSelf.bottomStripeNode.supernode == nil {
+                                    strongSelf.insertSubnode(strongSelf.bottomStripeNode, at: 2)
+                                }
+                                if strongSelf.maskNode.supernode == nil {
+                                    strongSelf.addSubnode(strongSelf.maskNode)
+                                }
+                                let hasCorners = itemListHasRoundedBlockLayout(params)
+                                var hasTopCorners = false
+                                var hasBottomCorners = false
+                                switch neighbors.top {
+                                case .sameSection(false):
+                                    strongSelf.topStripeNode.isHidden = true
+                                default:
+                                    hasTopCorners = true
+                                    strongSelf.topStripeNode.isHidden = hasCorners
+                                }
+                                let bottomStripeInset: CGFloat
+                                switch neighbors.bottom {
+                                case .sameSection(false):
+                                    bottomStripeInset = leftInset
+                                    strongSelf.bottomStripeNode.isHidden = false
+                                default:
+                                    bottomStripeInset = 0.0
+                                    hasBottomCorners = true
+                                    strongSelf.bottomStripeNode.isHidden = hasCorners
+                                }
                                 
-                                    strongSelf.maskNode.image = hasCorners ? PresentationResourcesItemList.cornersImage(item.presentationData.theme, top: hasTopCorners, bottom: hasBottomCorners) : nil
-                                    
-                                    strongSelf.backgroundNode.frame = CGRect(origin: CGPoint(x: 0.0, y: -min(insets.top, separatorHeight)), size: CGSize(width: params.width, height: contentSize.height + min(insets.top, separatorHeight) + min(insets.bottom, separatorHeight)))
-                                    strongSelf.maskNode.frame = strongSelf.backgroundNode.frame.insetBy(dx: params.leftInset, dy: 0.0)
-                                    strongSelf.topStripeNode.frame = CGRect(origin: CGPoint(x: 0.0, y: -min(insets.top, separatorHeight)), size: CGSize(width: nodeLayout.size.width, height: separatorHeight))
-                                    transition.updateFrameAdditive(node: strongSelf.bottomStripeNode, frame: CGRect(origin: CGPoint(x: bottomStripeInset, y: contentSize.height - separatorHeight), size: CGSize(width: nodeLayout.size.width - bottomStripeInset, height: separatorHeight)))
+                                strongSelf.maskNode.image = hasCorners ? PresentationResourcesItemList.cornersImage(item.presentationData.theme, top: hasTopCorners, bottom: hasBottomCorners) : nil
+                                
+                                strongSelf.backgroundNode.frame = CGRect(origin: CGPoint(x: 0.0, y: -min(insets.top, separatorHeight)), size: CGSize(width: params.width, height: contentSize.height + min(insets.top, separatorHeight) + min(insets.bottom, separatorHeight)))
+                                strongSelf.maskNode.frame = strongSelf.backgroundNode.frame.insetBy(dx: params.leftInset, dy: 0.0)
+                                strongSelf.topStripeNode.frame = CGRect(origin: CGPoint(x: 0.0, y: -min(insets.top, separatorHeight)), size: CGSize(width: nodeLayout.size.width, height: separatorHeight))
+                                transition.updateFrameAdditive(node: strongSelf.bottomStripeNode, frame: CGRect(origin: CGPoint(x: bottomStripeInset, y: contentSize.height - separatorHeight), size: CGSize(width: nodeLayout.size.width - bottomStripeInset, height: separatorHeight)))
                             }
                             
-                    
+                            
                             transition.updateFrameAdditive(node: strongSelf.avatarNode, frame: CGRect(origin: CGPoint(x: revealOffset + leftInset - 52.0, y: floor((contentSize.height - avatarDiameter) / 2.0)), size: CGSize(width: avatarDiameter, height: avatarDiameter)))
                             
                             let _ = titleApply()
@@ -730,19 +730,47 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
     
     @objc func infoPressed() {
         if let item = self.layoutParams?.0 {
-            getStringDate { stringDate in
-                item.interaction.openInfo(item.topMessage.id.peerId, item.messages, stringDate)
+            if checkDateIsToday() {
+                item.interaction.openInfo(item.topMessage.id.peerId, item.messages, UserDefaultManager.getCurrentStringDate() ?? "")
+            } else {
+                getStringDate { stringDate in
+                    item.interaction.openInfo(item.topMessage.id.peerId, item.messages, stringDate)
+                }
             }
         }
     }
     
     private func getStringDate(completionHandler: @escaping (String) -> Void) {
-        self.stringDatePromise.set(timeService.fetchTime())
+        self.stringDatePromise.set(getSignalDate())
         
         self.stringDateDisposable = (self.stringDatePromise.get()
                                      |> deliverOnMainQueue).start(next: { value in
             completionHandler(value)
         })
+    }
+    
+    private func checkDateIsToday() -> Bool {
+        if let savedStringDate = UserDefaultManager.getCurrentStringDate() {
+            let currentDate = Date().dateToString()
+            return currentDate == savedStringDate ? true : false
+        }
+        return false
+    }
+    
+    private func getSignalDate() -> Signal<String, NoError> {
+        return Signal<String, NoError> { subscriber in
+            self.timeService.fetchTime { result in
+                switch result {
+                case .success(let stringDate):
+                    subscriber.putNext(stringDate)
+                    UserDefaultManager.setCurrentStringDate(stringDate)
+                case .failure(let error):
+                    debugPrint("Error with fetching date", error.description)
+                }
+            }
+            
+            return EmptyDisposable
+        }
     }
     
     override func revealOptionsInteractivelyOpened() {
@@ -794,11 +822,11 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
             transition.updateFrameAdditive(node: self.dateNode, frame: CGRect(origin: CGPoint(x: editingOffset + revealOffset + self.bounds.size.width - dateRightInset - self.dateNode.bounds.size.width, y: self.dateNode.frame.minY), size: self.dateNode.bounds.size))
             
             transition.updateFrameAdditive(node: self.typeIconNode, frame: CGRect(origin: CGPoint(x: revealOffset + leftInset - 81.0, y: self.typeIconNode.frame.minY), size: self.typeIconNode.bounds.size))
-                        
+            
             transition.updateFrameAdditive(node: self.infoButtonNode, frame: CGRect(origin: CGPoint(x: revealOffset + self.bounds.size.width - infoIconRightInset - self.infoButtonNode.bounds.width, y: self.infoButtonNode.frame.minY), size: self.infoButtonNode.bounds.size))
         }
     }
-
+    
     override func revealOptionSelected(_ option: ItemListRevealOption, animated: Bool) {
         self.setRevealOptionsOpened(false, animated: true)
         self.revealOptionsInteractivelyClosed()
@@ -814,29 +842,63 @@ class CallListCallItemNode: ItemListRevealOptionsItemNode {
     }
 }
 
-struct APITimeService {
+enum FetchTimeError: Error {
+    case urlFailed
+    case jsonConversionFailure
+    case invalidData
+    case serverError
+    case notFound
+    case clientError
     
-    func fetchTime() -> Signal<String, NoError> {
-        return Signal { subscriber in
-            if let url = URL(string: "http://worldtimeapi.org/api/timezone/Europe/Moscow") {
-                
-                URLSession.shared.dataTask(with: url) { data, _, error in
-                    guard let data = data else { return }
-                    do {
-                        let decoder = JSONDecoder()
-                        let timeData = try decoder.decode(TimeModel.self, from: data)
-                        
-                            debugPrint("time", timeData.datetime.dateToReadableFormat())
-                            subscriber.putNext(timeData.datetime.dateToReadableFormat())
-                        
-                    } catch {
-                        debugPrint("error", error)
-                    }
-                }.resume()
-            }
-            
-            return EmptyDisposable
+    var description: String {
+        switch self {
+        case .urlFailed:
+            return "Ошибка с урл"
+        case .jsonConversionFailure:
+            return "Ошибка при декодировании данных"
+        case .invalidData:
+            return "Ошибка при получении данных"
+        case .serverError:
+            return "Ошибка сервера"
+        case .notFound:
+            return "Не найдено"
+        case .clientError:
+            return "Ошибка при отправке запроса"
         }
+    }
+}
+
+struct APITimeService {
+    func fetchTime(completion: @escaping (Result<String, FetchTimeError>) -> Void) {
+        guard let url = URL(string: "http://worldtimeapi.org/api/timezone/Europe/Moscow") else {
+            completion(.failure(.urlFailed))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 400:
+                    completion(.failure(.clientError))
+                case 404:
+                    completion(.failure(.notFound))
+                case 500 ..< 526:
+                    completion(.failure(.serverError))
+                default: break
+                }
+            }
+            guard let data = data else {
+                completion(.failure(.invalidData))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let timeData = try decoder.decode(TimeModel.self, from: data)
+                completion(.success(timeData.datetime.dateToReadableFormat()))
+            } catch {
+                completion(.failure(.jsonConversionFailure))
+            }
+        }.resume()
     }
 }
 
@@ -847,9 +909,32 @@ struct TimeModel: Codable {
 extension String {
     func dateToReadableFormat() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS+hh:mm"
-        let date = formatter.date(from: self) ?? Date(timeInterval: -86400, since: Date())
-        formatter.dateFormat = "dd MMM yyyy"
+        formatter.dateFormat = DateFormatType.serverType.rawValue
+        let date = formatter.date(from: self) ?? Date()
+        formatter.dateFormat = DateFormatType.readableType.rawValue
         return formatter.string(from: date)
+    }
+}
+
+extension Date {
+    func dateToString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = DateFormatType.readableType.rawValue
+        return formatter.string(from: self)
+    }
+}
+
+enum DateFormatType: String {
+    case serverType = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS+hh:mm"
+    case readableType = "dd MMM yyyy"
+}
+
+enum UserDefaultManager {
+    static func getCurrentStringDate() -> String? {
+        UserDefaults.standard.string(forKey: "Date")
+    }
+    
+    static func setCurrentStringDate(_ stringDate: String) {
+        UserDefaults.standard.set(stringDate, forKey: "Date")
     }
 }
