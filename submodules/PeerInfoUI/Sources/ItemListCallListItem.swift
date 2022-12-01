@@ -19,11 +19,11 @@ public class ItemListCallListItem: ListViewItem, ItemListItem {
     let style: ItemListStyle
     let displayDecorations: Bool
     
-    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, messages: [Message], stringData: String, sectionId: ItemListSectionId, style: ItemListStyle, displayDecorations: Bool = true) {
+    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, messages: [Message], stringDate: String, sectionId: ItemListSectionId, style: ItemListStyle, displayDecorations: Bool = true) {
         self.presentationData = presentationData
         self.dateTimeFormat = dateTimeFormat
         self.messages = messages
-        self.stringDate = stringData
+        self.stringDate = stringDate
         self.sectionId = sectionId
         self.style = style
         self.displayDecorations = displayDecorations
@@ -234,8 +234,6 @@ public class ItemListCallListItemNode: ListViewItemNode {
                 insets = UIEdgeInsets()
             }
             
-//            let earliestMessage = item.messages.sorted(by: {$0.timestamp < $1.timestamp}).first!
-//            let titleText = stringForDate(timestamp: earliestMessage.timestamp, strings: item.presentationData.strings)
             let titleText = item.stringDate
             let (titleLayout, titleApply) = makeTitleLayout(TextNodeLayoutArguments(attributedString: NSAttributedString(string: titleText, font: titleFont, textColor: item.presentationData.theme.list.itemPrimaryTextColor), backgroundColor: nil, maximumNumberOfLines: 1, truncationType: .end, constrainedSize: CGSize(width: params.width - params.rightInset - 20.0 - leftInset, height: CGFloat.greatestFiniteMagnitude), alignment: .natural, cutout: nil, insets: UIEdgeInsets()))
             

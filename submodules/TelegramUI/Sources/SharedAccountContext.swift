@@ -1557,9 +1557,9 @@ private func peerInfoControllerImpl(context: AccountContext, updatedPresentation
         switch mode {
         case let .nearbyPeer(distance):
             nearbyPeerDistance = distance
-        case let .calls(messages, stringDae):
+        case let .calls(messages, stringDate):
             callMessages = messages
-            callStringDate = stringDae
+            callStringDate = stringDate
         case .generic:
             break
         case let .group(id):
